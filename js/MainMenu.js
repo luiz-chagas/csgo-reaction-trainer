@@ -17,8 +17,8 @@ BasicGame.MainMenu.prototype = {
         splash.height = game.height;
         splash.width = game.width;
 
-        var menuStyle = { font: "24px Trebuchet MS", fill: "#F47B22"};
-        var subMenuStyle = {font: "16px Trebuchet MS", fill: "#FFFFFF"};
+        var menuStyle = { font: "24px Special Elite", fill: "#F47B22"};
+        var subMenuStyle = {font: "20px Arial", fill: "#FFFFFF"};
         var options = game.add.group();
         var subOptions = game.add.group();
         options.add(game.add.text(80, 360, "Play Game", menuStyle));
@@ -31,8 +31,9 @@ BasicGame.MainMenu.prototype = {
         options.forEach(function(item){
             item.anchor.setTo(0,1);
             item.stroke = '#000000';
-            item.strokeThickness = 1;
+            item.strokeThickness = 2;
             item.inputEnabled = true;
+            item.setShadow(3, 3, 'rgba(0,0,0,0.5)', 15);
             item.events.onInputOver.add(function(item){
                 item.fill = '#ffffff';
             }, this);
@@ -44,7 +45,8 @@ BasicGame.MainMenu.prototype = {
         subOptions.forEach(function(item){
             item.anchor.setTo(0,1);
             item.stroke = '#000000';
-            item.strokeThickness = 1;
+            item.strokeThickness = 2;
+            item.setShadow(3, 3, 'rgba(0,0,0,0.5)', 15);
         });
 
 		// this.music = this.add.audio('titleMusic');

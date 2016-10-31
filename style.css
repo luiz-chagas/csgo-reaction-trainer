@@ -1,0 +1,9 @@
+body {
+    margin: 0px;
+    font-family: 'Special Elite', cursive;
+}
+
+.fontHack {
+    position: absolute;
+    left: -100px;
+}
