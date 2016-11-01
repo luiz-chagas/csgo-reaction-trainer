@@ -11,6 +11,7 @@ BasicGame.MainMenu.prototype = {
 		//	We've already preloaded our assets, so let's kick right into the Main Menu itself.
 		//	Here all we're doing is playing some music and adding a picture and button
 		//	Naturally I expect you to do something significantly better :)
+        var self = this;
 
         var splash = this.add.image(game.world.centerX, game.world.centerY, 'splash');
         splash.anchor.setTo(0.5);
@@ -40,6 +41,7 @@ BasicGame.MainMenu.prototype = {
             item.events.onInputOut.add(function(item){
                 item.fill = '#F47B22';
             }, this);
+            item.events.onInputDown.add(self.menuClicked, this);
         });
 
         subOptions.forEach(function(item){
@@ -56,6 +58,10 @@ BasicGame.MainMenu.prototype = {
         //
 		// this.playButton = this.add.button(400, 600, 'playButton', this.startGame, this, 'buttonOver', 'buttonOut', 'buttonOver');
 	},
+
+    menuClicked: function(item) {
+            if(item.text == "Play Game") game.state.start('Game');
+    },
 
 	update: function () {
 
