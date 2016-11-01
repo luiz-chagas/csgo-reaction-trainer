@@ -43,8 +43,8 @@ BasicGame.Preloader.prototype = {
 		//this.preloadBar.cropEnabled = false;
 
         // Starts next state
-        this.state.start('Producer');
-        //this.state.start('Game');
+        //this.state.start('Producer');
+        this.state.start('Game');
 	},
 
 	update: function () {
