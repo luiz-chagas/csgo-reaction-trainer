@@ -28,6 +28,7 @@ BasicGame.Game = function (game) {
     var backgroundOverlayRight;
     var enemies;
     var difficulty;
+    var handOverlay;
 };
 
 BasicGame.Game.prototype = {
@@ -51,6 +52,11 @@ BasicGame.Game.prototype = {
         this.backgroundOverlayRight = this.game.add.sprite(1060, 0, 'dust2R');
         this.backgroundOverlayRight.inputEnabled = true;
         this.backgroundOverlayLeft.inputEnabled = true;
+        
+        this.handOverlay = this.game.add.image(200, 145, 'hand');
+        this.handOverlay.scale.setTo(0.8);
+        //this.handOverlay.width = 800;
+        //this.handOverlay.height = 600;
 
 
         //background.anchor.setTo(0.5);
@@ -77,6 +83,7 @@ BasicGame.Game.prototype = {
         var dx = this.game.input.x + this.game.camera.x;
         var dy = this.game.input.y + this.game.camera.y;
         if(player.body.hitTest(dx, dy)){
+            this.animateGun();
             player.destroy();
             this.difficulty--;
             console.log(this.difficulty);
@@ -101,10 +108,15 @@ BasicGame.Game.prototype = {
 	    this.enemies.add(this.enemy);
         //this.game.world.bringToTop(this.backgroundOverlay);
     },
+    
+    animateGun: function(){
+        this.game.add.tween(this.handOverlay).to({y:165}, 50, Phaser.Easing.Linear.None, true, 0, 0, true);
+    },
 
     update: function () {
         //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
         this.camera.x = this.input.activePointer.x/2 + 300;
+        this.handOverlay.x = this.input.activePointer.x/2 + 200;
     },
 
     render: function(){
