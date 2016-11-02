@@ -28,8 +28,9 @@ BasicGame.Preloader.prototype = {
         this.load.image('sierraGames', 'images/sierraGames.png');
         this.load.image('splash', 'images/splash.jpg');
         this.load.image('dust2bg', 'images/dust2_back.jpg');
-        this.load.image('dust2', 'images/dust2.png');
-        this.load.image('ct', 'images/ct.png');
+        this.load.image('dust2L', 'images/dust2L.png');
+        this.load.image('dust2R', 'images/dust2R.png');
+        this.load.image('enemy', 'images/arctic.png');
 		//this.load.atlas('playButton', 'images/play_button.png', 'images/play_button.json');
 		//this.load.audio('titleMusic', ['audio/main_menu.mp3']);
 		//this.load.bitmapFont('caslon', 'fonts/caslon.png', 'fonts/caslon.xml');
