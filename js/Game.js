@@ -22,7 +22,7 @@ BasicGame.Game = function (game) {
 
     //  You can use any of these from any function within this State.
     //  But do consider them as being 'reserved words', i.e. don't create a property for your own game called "world" or you'll over-write the world reference.
-    
+
     var enemy;
     var background;
     var backgroundOverlayLeft;
@@ -43,9 +43,9 @@ BasicGame.Game.prototype = {
         this.physics.startSystem(Phaser.Physics.ARCADE);
 
         var self = this;
-        
+
         this.ak47 = this.add.audio('ak47');
-        this.ak47.volume = 0.05;
+        this.ak47.volume = 0.1;
         this.ak47.allowMultiple = true;
 
         //var background = this.add.image(game.world.centerX, game.world.centerY+100, 'dust2bg');
@@ -63,12 +63,12 @@ BasicGame.Game.prototype = {
         this.backgroundOverlayRight = this.add.sprite(1060, 0, 'dust2R');
         this.physics.arcade.enable(this.backgroundOverlayLeft);
         this.physics.arcade.enable(this.backgroundOverlayRight);
-        
+
         this.overlayStyle = {font: "20px Arial", fill: "#F69D44"};
         this.moneyOverlay = this.add.text(20,280,"$" + this.money, this.overlayStyle);
         this.moneyOverlay.fixedToCamera = true;
 
-        
+
         this.handOverlay = this.game.add.image(0, 145, 'hand');
         this.handOverlay.scale.setTo(0.8);
         //this.handOverlay.width = 800;
@@ -86,16 +86,37 @@ BasicGame.Game.prototype = {
         this.world.setBounds(0, 0, 1920,1080);
         this.camera.y = 150;
 
-        this.time.events.loop(2 * Phaser.Timer.SECOND, this.leftPeek, this);
+        this.time.events.loop(3 * Phaser.Timer.SECOND, this.peek, this);
         this.input.onDown.add(this.fire, this);
     },
 
-    leftPeek: function() {
-        var go = this.add.tween(this.enemy).to({x:850}, 50*this.difficulty, Phaser.Easing.Linear.None, true);
-        var back = this.add.tween(this.enemy).to({x:780}, 50*this.difficulty, Phaser.Easing.Linear.None, false);
+    leftPeek: function(delay) {
+        this.enemy.x = 790;
+        var go = this.add.tween(this.enemy).to({x:840}, 50*this.difficulty, Phaser.Easing.Linear.None, true, delay*500);
+        var back = this.add.tween(this.enemy).to({x:790}, 50*this.difficulty, Phaser.Easing.Linear.None, false);
         go.chain(back);
     },
-    
+
+    rightPeek: function(delay){
+        this.enemy.x = 1100;
+        var go = this.add.tween(this.enemy).to({x:1050}, 50*this.difficulty, Phaser.Easing.Linear.None, true, delay*500);
+        var back = this.add.tween(this.enemy).to({x:1100}, 50*this.difficulty, Phaser.Easing.Linear.None, false);
+        go.chain(back);
+    },
+
+    peek: function(){
+        var n = this.rnd.integerInRange(0,1);
+        var delay = this.rnd.integerInRange(1,4);
+        switch(n){
+            case 0:
+                this.leftPeek(delay);
+                break;
+            case 1:
+                this.rightPeek(delay);
+                break;
+        }
+    },
+
     fire: function(){
         if(this.time.now > this.lastShot+200){
             this.lastShot = this.time.now;
@@ -145,15 +166,15 @@ BasicGame.Game.prototype = {
 	    this.enemies.add(this.enemy);
         //this.game.world.bringToTop(this.backgroundOverlay);
     },
-    
+
     animateGun: function(){
         this.add.tween(this.handOverlay).to({y:165}, 50, Phaser.Easing.Linear.None, true, 0, 0, true);
     },
 
     update: function () {
         //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
-        this.camera.x = this.input.activePointer.x/2 + 300;
-        this.handOverlay.x = this.input.activePointer.x/2 + 200;
+        this.camera.x = this.input.activePointer.x/2 + 350;
+        this.handOverlay.x = this.input.activePointer.x/2 + 250;
         this.moneyOverlay.text = "$" + this.money;
     },
 
