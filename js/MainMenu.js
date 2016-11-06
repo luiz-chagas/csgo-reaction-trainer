@@ -13,26 +13,30 @@ BasicGame.MainMenu.prototype = {
 		//	Naturally I expect you to do something significantly better :)
         var self = this;
 
-        var splash = this.add.image(game.world.centerX, game.world.centerY, 'splash');
+        var splash = this.add.image(this.game.world.centerX, this.game.world.centerY, 'splash');
         splash.anchor.setTo(0.5);
-        splash.height = game.height;
-        splash.width = game.width;
+        splash.height = this.game.height;
+        splash.width = this.game.width;
 
         var menuStyle = { font: "24px Special Elite", fill: "#F47B22"};
         var subMenuStyle = {font: "20px Arial", fill: "#FFFFFF"};
-        var options = game.add.group();
-        var subOptions = game.add.group();
-        options.add(game.add.text(80, 360, "Play Game", menuStyle));
-        options.add(game.add.text(80, 390, "Options", menuStyle));
-        options.add(game.add.text(80, 420, "Credits", menuStyle));
-        subOptions.add(game.add.text(240, 360, "This is just a demo, no game so far.", subMenuStyle));
-        subOptions.add(game.add.text(240, 390, "It would be wonderful to tweak some parameters.", subMenuStyle));
-        subOptions.add(game.add.text(240, 420, "Meet the amazing dev team.", subMenuStyle));
+        var options = this.game.add.group();
+        var subOptions = this.game.add.group();
+        options.add(this.game.add.text(80, 330, "Play Easy", menuStyle));
+        options.add(this.game.add.text(80, 360, "Play Medium", menuStyle));
+        options.add(this.game.add.text(80, 390, "Play Hard", menuStyle));
+        options.add(this.game.add.text(80, 420, "Options", menuStyle));
+        options.add(this.game.add.text(80, 450, "Credits", menuStyle));
+        subOptions.add(this.game.add.text(240, 330, "For beginners, silver level.", subMenuStyle));
+        subOptions.add(this.game.add.text(240, 360, "For experienced players, badge level.", subMenuStyle));
+        subOptions.add(this.game.add.text(240, 390, "For inhuman reactions, global level.", subMenuStyle));
+        subOptions.add(this.game.add.text(240, 420, "Nothing here yet.", subMenuStyle));
+        subOptions.add(this.game.add.text(240, 450, "Nothing here yet.", subMenuStyle));
 
         options.forEach(function(item){
             item.anchor.setTo(0,1);
             item.stroke = '#000000';
-            item.strokeThickness = 2;
+            item.strokeThickness = 3;
             item.inputEnabled = true;
             item.setShadow(3, 3, 'rgba(0,0,0,0.5)', 15);
             item.events.onInputOver.add(function(item){
@@ -50,17 +54,20 @@ BasicGame.MainMenu.prototype = {
             item.strokeThickness = 2;
             item.setShadow(3, 3, 'rgba(0,0,0,0.5)', 15);
         });
-
-		// this.music = this.add.audio('titleMusic');
-		// this.music.play();
-        //
-		// this.add.sprite(0, 0, 'titlepage');
-        //
-		// this.playButton = this.add.button(400, 600, 'playButton', this.startGame, this, 'buttonOver', 'buttonOut', 'buttonOver');
 	},
 
     menuClicked: function(item) {
-            if(item.text == "Play Game") game.state.start('Game');
+            switch(item.text){
+                    case "Play Easy":
+                        this.game.state.start('Game', true, false, 3);
+                        break;
+                    case "Play Medium":
+                        this.game.state.start('Game', true, false, 2);
+                        break;
+                    case "Play Hard":
+                        this.game.state.start("Game", true, false, 1);
+                        break;
+                }
     },
 
 	update: function () {

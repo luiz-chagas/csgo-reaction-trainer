@@ -33,13 +33,22 @@ BasicGame.Game = function (game) {
     this.lastShot;
     this.ak47;
     this.overlayStyle;
-    this.money;
-    this.moneyOverlay;
+    this.score;
+    this.scoreOverlay;
     this.health;
     this.healthOverlay;
+    this.kills;
+    this.killsOverlay;
 };
 
 BasicGame.Game.prototype = {
+    
+    init: function(dif){
+        this.difficulty = dif;
+        this.score = 0;
+        this.health = 100;
+        this.kills = 0;
+    },
 
     create: function () {
         this.physics.startSystem(Phaser.Physics.ARCADE);
@@ -50,13 +59,7 @@ BasicGame.Game.prototype = {
         this.ak47.volume = 0.1;
         this.ak47.allowMultiple = true;
 
-        //var background = this.add.image(game.world.centerX, game.world.centerY+100, 'dust2bg');
-        //var backgroundOverlay = this.add.image(game.world.centerX, game.world.centerY+100, 'dust2');
-        this.difficulty = 10;
-        this.money = 0;
-        this.health = 100;
-
-        this.background = this.add.sprite(0, 0, 'dust2bg');
+        this.background = this.add.image(0, 0, 'dust2bg');
 
         this.enemies = this.add.group();
 
@@ -67,27 +70,20 @@ BasicGame.Game.prototype = {
         this.physics.arcade.enable(this.backgroundOverlayLeft);
         this.physics.arcade.enable(this.backgroundOverlayRight);
 
-        this.overlayStyle = {font: "22px Arial", fill: "#F69D44"};
-        this.moneyOverlay = this.add.text(20,280,"$" + this.money, this.overlayStyle);
-        this.moneyOverlay.fixedToCamera = true;
-        this.healthOverlay = this.add.text(40,550,this.health, this.overlayStyle);
+        this.overlayStyle = {font: "20px Bungee Hairline", fill: "#209606"};
+        
+        this.scoreOverlay = this.add.text(20, 280, "", this.overlayStyle);
+        this.scoreOverlay.fixedToCamera = true;
+        this.healthOverlay = this.add.text(20, 530, "", this.overlayStyle);
         this.healthOverlay.fixedToCamera = true;
-
+        this.killsOverlay = this.add.text(720, 280, "", this.overlayStyle);
+        this.killsOverlay.fixedToCamera = true;
 
         this.handOverlay = this.game.add.image(0, 145, 'hand');
         this.handOverlay.scale.setTo(0.8);
-        //this.handOverlay.width = 800;
-        //this.handOverlay.height = 600;
 
         this.lastShot = 0;
-        //background.anchor.setTo(0.5);
-        //background.height = this.game.height;
-        //background.scale.setTo(1);
-        //backgroundOverlay.anchor.setTo(0.5);
-        //backgroundOverlay.height = this.game.height;
-        //backgroundOverlay.scale.setTo(1);
-        //background.width = this.game.width;
-        //var splash = this.add.image(game.world.centerX, game.world.centerY, 'splash');
+
         this.world.setBounds(0, 0, 1920,1080);
         this.camera.y = 150;
 
@@ -97,20 +93,25 @@ BasicGame.Game.prototype = {
 
     leftPeek: function(delay) {
         this.enemy.x = 790;
-        var go = this.add.tween(this.enemy).to({x:840}, 50*this.difficulty, Phaser.Easing.Linear.None, true, delay*500);
-        var back = this.add.tween(this.enemy).to({x:790}, 50*this.difficulty, Phaser.Easing.Linear.None, false);
+        var returnDelay = (this.difficulty+1) * 250;
+        var go = this.add.tween(this.enemy).to({x:850}, 200, Phaser.Easing.Linear.None, true, delay*500);
+        var back = this.add.tween(this.enemy).to({x:790}, 200, Phaser.Easing.Linear.None, false, returnDelay);
         go.chain(back);
         back.onComplete.add(this.hitPlayer, this);
     },
 
     hitPlayer: function(){
         this.health -= 10;
+        if(this.health == 0){
+            this.quitGame();
+        }
     },
 
     rightPeek: function(delay){
         this.enemy.x = 1100;
-        var go = this.add.tween(this.enemy).to({x:1050}, 50*this.difficulty, Phaser.Easing.Linear.None, true, delay*500);
-        var back = this.add.tween(this.enemy).to({x:1100}, 50*this.difficulty, Phaser.Easing.Linear.None, false);
+        var returnDelay = (this.difficulty+1) * 250;
+        var go = this.add.tween(this.enemy).to({x:1040}, 200, Phaser.Easing.Linear.None, true, delay*500);
+        var back = this.add.tween(this.enemy).to({x:1100}, 200, Phaser.Easing.Linear.None, false, returnDelay);
         go.chain(back);
         back.onComplete.add(this.hitPlayer, this);
     },
@@ -136,33 +137,18 @@ BasicGame.Game.prototype = {
             var dx = this.input.x + this.game.camera.x;
             var dy = this.input.y + this.game.camera.y;
             if(this.enemy.body.hitTest(dx, dy) && !this.backgroundOverlayLeft.body.hitTest(dx, dy) && !this.backgroundOverlayRight.body.hitTest(dx, dy)){
-                this.difficulty--;
-                this.money += 300;
-                if(this.difficulty==0){
+                this.kills++;
+                this.score += 300;
+                if(this.kills==10){
                     this.quitGame();
                 }
                 this.enemy.destroy();
                 this.spawn();
             }else{
-                this.money = (this.money > 0) ? this.money-50 : 0;
+                this.score = (this.score > 0) ? this.score-50 : 0;
             }
         }
     },
-
-    // hit: function(player){
-    //     var dx = this.game.input.x + this.game.camera.x;
-    //     var dy = this.game.input.y + this.game.camera.y;
-    //     if(player.body.hitTest(dx, dy)){
-    //         this.animateGun();
-    //         player.destroy();
-    //         this.difficulty--;
-    //         console.log(this.difficulty);
-    //         if(this.difficulty==0){
-    //             this.quitGame();
-    //         }
-    //         this.spawn();
-    //     }
-    // },
 
     spawn: function(group){
         this.enemy = this.add.sprite(780, 510, 'enemy');
@@ -179,15 +165,19 @@ BasicGame.Game.prototype = {
     },
 
     animateGun: function(){
-        this.add.tween(this.handOverlay).to({y:165}, 50, Phaser.Easing.Linear.None, true, 0, 0, true);
+        var toY = this.handOverlay.y + 50;
+        this.add.tween(this.handOverlay).to({y:toY}, 50, Phaser.Easing.Linear.None, true, 0, 0, true);
     },
 
     update: function () {
-        //  Honestly, just about anything could go here. It's YOUR game after all. Eat your heart out!
-        this.camera.x = this.input.activePointer.x/2 + 350;
-        this.handOverlay.x = this.input.activePointer.x/2 + 250;
-        this.moneyOverlay.text = "$" + this.money;
-        this.healthOverlay.text = this.health;
+        this.camera.x = this.input.activePointer.x + 200;
+        this.camera.y = this.input.activePointer.y/2;
+        this.handOverlay.x = this.input.activePointer.x + 200;
+        this.handOverlay.y = this.input.activePointer.y/2;
+        
+        this.scoreOverlay.text = "Score\n" + this.score;
+        this.healthOverlay.text = "Health\n" + this.health;
+        this.killsOverlay.text = "Kills\n" + this.kills + "/10";
     },
 
     render: function(){
@@ -195,11 +185,8 @@ BasicGame.Game.prototype = {
     },
 
     quitGame: function () {
-
-        //  Here you should destroy anything you no longer need.
-        //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
+        this.enemy.destroy();
         this.world.setBounds(0, 0, 800, 600);
-        //  Then let's go back to the main menu.
         this.state.start('MainMenu');
 
     }
