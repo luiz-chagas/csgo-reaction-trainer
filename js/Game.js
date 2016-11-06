@@ -23,18 +23,20 @@ BasicGame.Game = function (game) {
     //  You can use any of these from any function within this State.
     //  But do consider them as being 'reserved words', i.e. don't create a property for your own game called "world" or you'll over-write the world reference.
 
-    var enemy;
-    var background;
-    var backgroundOverlayLeft;
-    var backgroundOverlayRight;
-    var enemies;
-    var difficulty;
-    var handOverlay;
-    var lastShot;
-    var ak47;
-    var overlayStyle;
-    var money;
-    var moneyOverlay;
+    this.enemy;
+    this.background;
+    this.backgroundOverlayLeft;
+    this.backgroundOverlayRight;
+    this.enemies;
+    this.difficulty;
+    this.handOverlay;
+    this.lastShot;
+    this.ak47;
+    this.overlayStyle;
+    this.money;
+    this.moneyOverlay;
+    this.health;
+    this.healthOverlay;
 };
 
 BasicGame.Game.prototype = {
@@ -52,6 +54,7 @@ BasicGame.Game.prototype = {
         //var backgroundOverlay = this.add.image(game.world.centerX, game.world.centerY+100, 'dust2');
         this.difficulty = 10;
         this.money = 0;
+        this.health = 100;
 
         this.background = this.add.sprite(0, 0, 'dust2bg');
 
@@ -64,9 +67,11 @@ BasicGame.Game.prototype = {
         this.physics.arcade.enable(this.backgroundOverlayLeft);
         this.physics.arcade.enable(this.backgroundOverlayRight);
 
-        this.overlayStyle = {font: "20px Arial", fill: "#F69D44"};
+        this.overlayStyle = {font: "22px Arial", fill: "#F69D44"};
         this.moneyOverlay = this.add.text(20,280,"$" + this.money, this.overlayStyle);
         this.moneyOverlay.fixedToCamera = true;
+        this.healthOverlay = this.add.text(40,550,this.health, this.overlayStyle);
+        this.healthOverlay.fixedToCamera = true;
 
 
         this.handOverlay = this.game.add.image(0, 145, 'hand');
@@ -95,6 +100,11 @@ BasicGame.Game.prototype = {
         var go = this.add.tween(this.enemy).to({x:840}, 50*this.difficulty, Phaser.Easing.Linear.None, true, delay*500);
         var back = this.add.tween(this.enemy).to({x:790}, 50*this.difficulty, Phaser.Easing.Linear.None, false);
         go.chain(back);
+        back.onComplete.add(this.hitPlayer, this);
+    },
+
+    hitPlayer: function(){
+        this.health -= 10;
     },
 
     rightPeek: function(delay){
@@ -102,6 +112,7 @@ BasicGame.Game.prototype = {
         var go = this.add.tween(this.enemy).to({x:1050}, 50*this.difficulty, Phaser.Easing.Linear.None, true, delay*500);
         var back = this.add.tween(this.enemy).to({x:1100}, 50*this.difficulty, Phaser.Easing.Linear.None, false);
         go.chain(back);
+        back.onComplete.add(this.hitPlayer, this);
     },
 
     peek: function(){
@@ -176,6 +187,7 @@ BasicGame.Game.prototype = {
         this.camera.x = this.input.activePointer.x/2 + 350;
         this.handOverlay.x = this.input.activePointer.x/2 + 250;
         this.moneyOverlay.text = "$" + this.money;
+        this.healthOverlay.text = this.health;
     },
 
     render: function(){
