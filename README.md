@@ -1,2 +1,2 @@
 # phaser-complete-game
-A template for a complete game in Phaser, with boot, loading, menu, etc.
+A reaction time trainer developed in Phaser. It looks and feel like Counter-Ctrike since it's aimed for first person shooter players.
