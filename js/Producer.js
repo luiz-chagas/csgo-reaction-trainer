@@ -29,8 +29,8 @@ BasicGame.Producer.prototype = {
         // tweenSierraFade.onComplete.add(function(){
         //     this.state.start('MainMenu');
         // },this);
-        var style = {font: "36px Bungee Hairline", fill: "#DDDDDD"};
-        var luiz = this.add.text(this.world.centerX, this.world.centerY, "Luiz Chagas", style);
+        var style = {font: "26px Special Elite", fill: "#1f5da8"};
+        var luiz = this.add.text(this.world.centerX, this.world.centerY, "CSGO reaction trainer by luizjr", style);
         luiz.anchor.setTo(0.5);
         luiz.alpha = 0;
         var tween = this.add.tween(luiz).to({alpha:1}, 700, Phaser.Easing.Linear.None, true, 0, 0, true);

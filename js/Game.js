@@ -32,6 +32,7 @@ BasicGame.Game = function (game) {
     this.handOverlay;
     this.lastShot;
     this.ak47;
+    this.headshot;
     this.overlayStyle;
     this.score;
     this.scoreOverlay;
@@ -56,8 +57,11 @@ BasicGame.Game.prototype = {
         var self = this;
 
         this.ak47 = this.add.audio('ak47');
-        this.ak47.volume = 0.1;
+        this.ak47.volume = 0.05;
         this.ak47.allowMultiple = true;
+        
+        this.headshot = this.add.audio('hs');
+        this.headshot.volume = 0.1;
 
         this.background = this.add.image(0, 0, 'dust2bg');
 
@@ -93,32 +97,33 @@ BasicGame.Game.prototype = {
 
     leftPeek: function(delay) {
         this.enemy.x = 790;
-        var returnDelay = (this.difficulty+1) * 250;
-        var go = this.add.tween(this.enemy).to({x:850}, 200, Phaser.Easing.Linear.None, true, delay*500);
-        var back = this.add.tween(this.enemy).to({x:790}, 200, Phaser.Easing.Linear.None, false, returnDelay);
+        var returnDelay = (this.difficulty) * 200;
+        var go = this.add.tween(this.enemy).to({x:850}, 100, Phaser.Easing.Linear.None, true, delay*250);
+        var back = this.add.tween(this.enemy).to({x:790}, 100, Phaser.Easing.Linear.None, false, returnDelay);
         go.chain(back);
         back.onComplete.add(this.hitPlayer, this);
     },
 
     hitPlayer: function(){
-        this.health -= 10;
-        if(this.health == 0){
+        this.headshot.play();
+        this.health -= 15;
+        if(this.health < 1){
             this.quitGame();
         }
     },
 
     rightPeek: function(delay){
         this.enemy.x = 1100;
-        var returnDelay = (this.difficulty+1) * 250;
-        var go = this.add.tween(this.enemy).to({x:1040}, 200, Phaser.Easing.Linear.None, true, delay*500);
-        var back = this.add.tween(this.enemy).to({x:1100}, 200, Phaser.Easing.Linear.None, false, returnDelay);
+        var returnDelay = (this.difficulty) * 200;
+        var go = this.add.tween(this.enemy).to({x:1040}, 100, Phaser.Easing.Linear.None, true, delay*250);
+        var back = this.add.tween(this.enemy).to({x:1100}, 100, Phaser.Easing.Linear.None, false, returnDelay);
         go.chain(back);
         back.onComplete.add(this.hitPlayer, this);
     },
 
     peek: function(){
         var n = this.rnd.integerInRange(0,1);
-        var delay = this.rnd.integerInRange(1,4);
+        var delay = this.rnd.integerInRange(1,8);
         switch(n){
             case 0:
                 this.leftPeek(delay);
@@ -170,9 +175,10 @@ BasicGame.Game.prototype = {
     },
 
     update: function () {
-        this.camera.x = this.input.activePointer.x + 200;
+        this.camera.x = this.input.activePointer.x/2 + 300;
         this.camera.y = this.input.activePointer.y/2;
-        this.handOverlay.x = this.input.activePointer.x + 200;
+        
+        this.handOverlay.x = this.input.activePointer.x/2 + 300;
         this.handOverlay.y = this.input.activePointer.y/2;
         
         this.scoreOverlay.text = "Score\n" + this.score;

@@ -18,20 +18,20 @@ BasicGame.MainMenu.prototype = {
         splash.height = this.game.height;
         splash.width = this.game.width;
 
-        var menuStyle = { font: "24px Special Elite", fill: "#F47B22"};
-        var subMenuStyle = {font: "20px Arial", fill: "#FFFFFF"};
+        var menuStyle = { font: "20px Special Elite", fill: "#1f5da8"};
+        //var subMenuStyle = {font: "20px Arial", fill: "#FFFFFF"};
         var options = this.game.add.group();
-        var subOptions = this.game.add.group();
+        //var subOptions = this.game.add.group();
         options.add(this.game.add.text(80, 330, "Play Easy", menuStyle));
         options.add(this.game.add.text(80, 360, "Play Medium", menuStyle));
         options.add(this.game.add.text(80, 390, "Play Hard", menuStyle));
         options.add(this.game.add.text(80, 420, "Options", menuStyle));
         options.add(this.game.add.text(80, 450, "Credits", menuStyle));
-        subOptions.add(this.game.add.text(240, 330, "For beginners, silver level.", subMenuStyle));
-        subOptions.add(this.game.add.text(240, 360, "For experienced players, badge level.", subMenuStyle));
-        subOptions.add(this.game.add.text(240, 390, "For inhuman reactions, global level.", subMenuStyle));
-        subOptions.add(this.game.add.text(240, 420, "Nothing here yet.", subMenuStyle));
-        subOptions.add(this.game.add.text(240, 450, "Nothing here yet.", subMenuStyle));
+        // subOptions.add(this.game.add.text(240, 330, "For beginners, gold nova level.", subMenuStyle));
+        // subOptions.add(this.game.add.text(240, 360, "For experienced players, badge level.", subMenuStyle));
+        // subOptions.add(this.game.add.text(240, 390, "For inhuman reactions, global level.", subMenuStyle));
+        // subOptions.add(this.game.add.text(240, 420, "Nothing here yet.", subMenuStyle));
+        // subOptions.add(this.game.add.text(240, 450, "Nothing here yet.", subMenuStyle));
 
         options.forEach(function(item){
             item.anchor.setTo(0,1);
@@ -43,17 +43,17 @@ BasicGame.MainMenu.prototype = {
                 item.fill = '#ffffff';
             }, this);
             item.events.onInputOut.add(function(item){
-                item.fill = '#F47B22';
+                item.fill = '#1f5da8';
             }, this);
             item.events.onInputDown.add(self.menuClicked, this);
         });
 
-        subOptions.forEach(function(item){
-            item.anchor.setTo(0,1);
-            item.stroke = '#000000';
-            item.strokeThickness = 2;
-            item.setShadow(3, 3, 'rgba(0,0,0,0.5)', 15);
-        });
+        // subOptions.forEach(function(item){
+        //     item.anchor.setTo(0,1);
+        //     item.stroke = '#000000';
+        //     item.strokeThickness = 2;
+        //     item.setShadow(3, 3, 'rgba(0,0,0,0.5)', 15);
+        // });
 	},
 
     menuClicked: function(item) {
